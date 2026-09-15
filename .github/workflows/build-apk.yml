@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,10 +26,35 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build debug APK
-        run: ./gradlew assembleDebug --no-daemon
+        run: ./gradlew assembleDebug --no-daemon --stacktrace > build-output.log 2>&1
+        continue-on-error: true
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: claude-companion-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+      - name: Publish result to ci-output branch
+        if: always()
+        run: |
+          set +e
+          mkdir -p /tmp/result
+          cp build-output.log /tmp/result/ 2>/dev/null
+          if [ -f app/build/outputs/apk/debug/app-debug.apk ]; then
+            cp app/build/outputs/apk/debug/app-debug.apk /tmp/result/
+            echo "success" > /tmp/result/status.txt
+          else
+            echo "failure" > /tmp/result/status.txt
+          fi
+          echo "${{ github.run_id }} ${{ github.run_number }} ${{ github.sha }}" > /tmp/result/run-info.txt
+
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git fetch origin ci-output 2>/dev/null
+          if git rev-parse --verify origin/ci-output >/dev/null 2>&1; then
+            git checkout -B ci-output origin/ci-output
+          else
+            git checkout --orphan ci-output
+            git rm -rf . > /dev/null 2>&1 || true
+          fi
+          rm -rf result
+          mkdir -p result
+          cp /tmp/result/* result/
+          git add result
+          git commit -m "Build result for run ${{ github.run_number }}" --allow-empty
+          git push origin ci-output --force
