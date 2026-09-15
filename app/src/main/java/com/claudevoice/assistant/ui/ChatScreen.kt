@@ -58,6 +58,7 @@ import com.claudevoice.assistant.voice.SpeechToText
 fun ChatScreen(
     viewModel: ChatViewModel,
     onOpenSettings: () -> Unit,
+    onOpenSessions: () -> Unit,
     onRequestMicPermission: () -> Unit,
     hasMicPermission: Boolean
 ) {
@@ -123,6 +124,12 @@ fun ChatScreen(
             TopAppBar(
                 title = { Text("Claude Companion") },
                 actions = {
+                    IconButton(onClick = onOpenSessions) {
+                        Icon(
+                            painterResource(R.drawable.ic_sessions),
+                            contentDescription = "Sessions"
+                        )
+                    }
                     IconButton(onClick = onOpenSettings) {
                         Icon(Icons.Filled.Settings, contentDescription = "Settings")
                     }

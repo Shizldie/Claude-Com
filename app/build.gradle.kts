@@ -12,8 +12,20 @@ android {
         applicationId = "com.claudevoice.assistant"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
+    }
+
+    signingConfigs {
+        // Committed on purpose: this is a fixed *debug* key (never valid for a
+        // Play Store release) so every CI build is signed identically and can
+        // install as an update over a previous build instead of conflicting.
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
     }
 
     buildTypes {

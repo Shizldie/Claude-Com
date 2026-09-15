@@ -22,6 +22,7 @@ import com.claudevoice.assistant.data.Prefs
 import com.claudevoice.assistant.service.ChatBackgroundService
 import com.claudevoice.assistant.ui.ChatScreen
 import com.claudevoice.assistant.ui.ChatViewModel
+import com.claudevoice.assistant.ui.SessionsActivity
 import com.claudevoice.assistant.ui.SettingsActivity
 import com.claudevoice.assistant.ui.theme.ClaudeVoiceTheme
 
@@ -56,6 +57,7 @@ class MainActivity : ComponentActivity() {
                 ChatScreen(
                     viewModel = viewModel,
                     onOpenSettings = { startActivity(Intent(this, SettingsActivity::class.java)) },
+                    onOpenSessions = { startActivity(Intent(this, SessionsActivity::class.java)) },
                     onRequestMicPermission = { micPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO) },
                     hasMicPermission = hasMicPermission
                 )

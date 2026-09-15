@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Claude Companion</string>
     <string name="settings_title">Settings</string>
+    <string name="sessions_title">Sessions</string>
     <string name="background_notification_text">Running in the background — tap to open</string>
     <string name="background_notification_stop">Stop</string>
 </resources>

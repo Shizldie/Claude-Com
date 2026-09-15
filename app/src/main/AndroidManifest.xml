@@ -46,6 +46,11 @@
             android:exported="false"
             android:label="@string/settings_title" />
 
+        <activity
+            android:name=".ui.SessionsActivity"
+            android:exported="false"
+            android:label="@string/sessions_title" />
+
         <service
             android:name=".service.ChatBackgroundService"
             android:exported="false"
