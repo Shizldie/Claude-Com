@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
@@ -42,16 +41,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.claudevoice.assistant.R
 import com.claudevoice.assistant.data.ChatMessage
 import com.claudevoice.assistant.tools.ContactCaller
 import com.claudevoice.assistant.voice.SpeechToText
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun ChatScreen(
     viewModel: ChatViewModel,
@@ -196,7 +198,11 @@ fun ChatScreen(
                         },
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Filled.Mic, contentDescription = "Push to talk", tint = Color.White)
+                    Icon(
+                        painterResource(R.drawable.ic_mic),
+                        contentDescription = "Push to talk",
+                        tint = Color.White
+                    )
                 }
             }
         }
