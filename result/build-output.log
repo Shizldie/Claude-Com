@@ -50,7 +50,7 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:processDebugResources
 
 > Task :app:compileDebugKotlin
-w: file:///home/runner/work/Claude-Com/Claude-Com/app/src/main/java/com/claudevoice/assistant/ui/ChatScreen.kt:172:39 'val Icons.Filled.Send: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Send.
+w: file:///home/runner/work/Claude-Com/Claude-Com/app/src/main/java/com/claudevoice/assistant/ui/ChatScreen.kt:179:39 'val Icons.Filled.Send: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.Send.
 
 > Task :app:compileDebugJavaWithJavac NO-SOURCE
 > Task :app:dexBuilderDebug
@@ -62,5 +62,5 @@ w: file:///home/runner/work/Claude-Com/Claude-Com/app/src/main/java/com/claudevo
 > Task :app:createDebugApkListingFileRedirect
 > Task :app:assembleDebug
 
-BUILD SUCCESSFUL in 2m 10s
+BUILD SUCCESSFUL in 2m 28s
 35 actionable tasks: 35 executed
