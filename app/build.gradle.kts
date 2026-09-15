@@ -12,8 +12,8 @@ android {
         applicationId = "com.claudevoice.assistant"
         minSdk = 26
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 3
+        versionName = "1.2"
     }
 
     signingConfigs {
@@ -60,6 +60,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.6")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
     implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.browser:browser:1.8.0")
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 

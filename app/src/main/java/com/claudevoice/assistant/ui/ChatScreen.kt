@@ -58,7 +58,6 @@ import com.claudevoice.assistant.voice.SpeechToText
 fun ChatScreen(
     viewModel: ChatViewModel,
     onOpenSettings: () -> Unit,
-    onOpenSessions: () -> Unit,
     onRequestMicPermission: () -> Unit,
     hasMicPermission: Boolean
 ) {
@@ -124,12 +123,6 @@ fun ChatScreen(
             TopAppBar(
                 title = { Text("Claude Companion") },
                 actions = {
-                    IconButton(onClick = onOpenSessions) {
-                        Icon(
-                            painterResource(R.drawable.ic_sessions),
-                            contentDescription = "Sessions"
-                        )
-                    }
                     IconButton(onClick = onOpenSettings) {
                         Icon(Icons.Filled.Settings, contentDescription = "Settings")
                     }
@@ -142,6 +135,33 @@ fun ChatScreen(
                 .padding(padding)
                 .fillMaxSize()
         ) {
+            Surface(
+                onClick = { SessionsLauncher.open(context) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                shape = RoundedCornerShape(12.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant
+            ) {
+                Row(
+                    modifier = Modifier.padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        painterResource(R.drawable.ic_sessions),
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text("Claude Code sessions", style = MaterialTheme.typography.titleSmall)
+                        Text(
+                            "View your sessions and connected devices",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                }
+            }
+
             LazyColumn(
                 state = listState,
                 modifier = Modifier
