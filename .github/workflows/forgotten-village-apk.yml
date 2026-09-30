@@ -1,0 +1,73 @@
+name: Forgotten Village APK
+
+# Builds the Forgotten Village Android app. Run it from the Actions tab ("Run workflow"),
+# or it runs by itself whenever the app code in forgotten-village/android changes.
+# Game updates do NOT need a new APK: the app downloads forgotten-village/dist/ from this repo.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'forgotten-village/android/**'
+      - '.github/workflows/forgotten-village-apk.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      # A signing key is created once and kept in the Actions cache (not in the repo), so later
+      # builds are signed the same way and install over the previous app without losing data.
+      - name: Restore signing key
+        id: ks
+        uses: actions/cache@v4
+        with:
+          path: |
+            fv-release.jks
+            fv-release.pw
+          key: fv-signing-key-v1
+
+      - name: Create signing key if missing
+        if: steps.ks.outputs.cache-hit != 'true'
+        run: |
+          PW=$(head -c 48 /dev/urandom | base64 | tr -dc 'A-Za-z0-9' | head -c 24)
+          keytool -genkeypair -keystore fv-release.jks -alias fv -keyalg RSA -keysize 2048 -validity 36500 \
+            -storepass "$PW" -keypass "$PW" -dname "CN=Forgotten Village"
+          echo "$PW" > fv-release.pw
+
+      - name: Bundle the current game into the app
+        run: |
+          cp forgotten-village/dist/forgotten-village.html forgotten-village/android/app/src/main/assets/
+          cp forgotten-village/dist/version.json forgotten-village/android/app/src/main/assets/
+
+      - name: Build signed APK
+        working-directory: forgotten-village/android
+        run: |
+          export FV_KS="$GITHUB_WORKSPACE/fv-release.jks"
+          export FV_KS_PASS="$(cat "$GITHUB_WORKSPACE/fv-release.pw")"
+          gradle assembleRelease --no-daemon --stacktrace
+
+      - name: Publish APK as a release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp forgotten-village/android/app/build/outputs/apk/release/app-release.apk forgotten-village.apk
+          gh release delete forgotten-village-apk --yes --cleanup-tag || true
+          gh release create forgotten-village-apk forgotten-village.apk \
+            --title "Forgotten Village (Android app)" \
+            --notes "Install this APK on your phone. Future game updates come through Settings > Updates inside the game." \
+            --target "${{ github.sha }}"

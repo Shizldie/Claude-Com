@@ -1,0 +1,38 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.forgottenvillage.game'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.forgottenvillage.game'
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName '1.0'
+    }
+
+    signingConfigs {
+        release {
+            // The signing key is created by the build workflow (or supplied by you); it is never stored in the repo.
+            storeFile file(System.getenv('FV_KS') ?: 'fv-release.jks')
+            storePassword System.getenv('FV_KS_PASS') ?: 'changeit'
+            keyAlias 'fv'
+            keyPassword System.getenv('FV_KS_PASS') ?: 'changeit'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
